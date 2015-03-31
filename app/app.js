@@ -1,18 +1,23 @@
 (function() {
 
-    var app = angular.module('customersApp', ['ngRoute']);
+    var app = angular.module('customersApp', ['ui.router']);
 
-    app.config(function($routeProvider) {
-        $routeProvider
-            .when('/', {
-                controller: 'CustomersController',
-                templateUrl: 'app/views/customers.html'
+    app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise("/customers");
+
+        $stateProvider
+            .state('customers', {
+                url: "/customers",
+                templateUrl: "app/views/customers.html",
+                controller: 'CustomersController'
             })
-            .when('/orders/:customerId', {
-                controller: 'OrdersController',
-                templateUrl: 'app/views/orders.html'
-            })
-            .otherwise( { redirectTo: '/' } );
-    });
+            .state('ordersByCustomer', {
+                url: "/customers/:customerId/orders",
+                templateUrl: "app/views/orders.html",
+                controller: 'OrdersController'
+            });
+
+
+    }]);
 
 }());
